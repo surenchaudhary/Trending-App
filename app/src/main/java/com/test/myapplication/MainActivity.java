@@ -13,10 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
+import com.test.myapplication.adapters.DeveloperRecyclerAdapter;
 import com.test.myapplication.adapters.OnRepoListener;
 import com.test.myapplication.adapters.ReposotriesRecyclerAdapter;
+import com.test.myapplication.rest.responses.DeveloperResponse;
 import com.test.myapplication.rest.responses.RepositoryResponse;
 import com.test.myapplication.utils.VerticalSpacingItemDecorator;
+import com.test.myapplication.viewmodels.DevelopersListViewModels;
 import com.test.myapplication.viewmodels.RepositoriesListViewModel;
 
 import java.util.List;
@@ -25,11 +28,13 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
 
     private static final String TAG = "MainActivity";
     private RepositoriesListViewModel mRepositoryListViewModel;
+    private DevelopersListViewModels mDeveloperListViewModel;
     private RecyclerView mRecyclerView;
-    private ReposotriesRecyclerAdapter mAdapter;
+    private ReposotriesRecyclerAdapter mRepositoryAdapter;
+    private DeveloperRecyclerAdapter mDeveloeprAdapter;
     private SearchView mSearchView;
     private TabLayout tabLayout;
-    private boolean isRepoSelected;
+    private boolean isRepoSelected = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,7 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
         mRecyclerView = findViewById(R.id.recyclerview);
         mSearchView = findViewById(R.id.search_view);
         mRepositoryListViewModel = ViewModelProviders.of(this).get(RepositoriesListViewModel.class);
+        mDeveloperListViewModel = ViewModelProviders.of(this).get(DevelopersListViewModels.class);
         initRecyclerView();
         subscribeObservers();
         initSearchView();
@@ -97,15 +103,22 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
     }
 
     private void loadRepositories() {
+        mRecyclerView.setAdapter(mRepositoryAdapter);
         isRepoSelected = true;
-        mAdapter.displayLoading();
+        mRepositoryAdapter.displayLoading();
         mRepositoryListViewModel.getRepositories();
         mSearchView.clearFocus();
     }
 
     private void loadDeveloeprs() {
+        mRecyclerView.setAdapter(mDeveloeprAdapter);
         isRepoSelected = false;
+        mDeveloeprAdapter.displayLoading();
+        mDeveloperListViewModel.getDevelopers();
+        mSearchView.clearFocus();
     }
+
+
 
     private void subscribeObservers() {
         mRepositoryListViewModel.getRepositoriesList().observe(this, new Observer<List<RepositoryResponse>>() {
@@ -113,7 +126,8 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
             public void onChanged(@Nullable List<RepositoryResponse> repository) {
                 if (repository != null) {
                     mRepositoryListViewModel.setIsPerformingQuery(false);
-                    mAdapter.setRepositories(repository);
+                    mRepositoryAdapter.setRepositories(repository);
+                    mRepositoryAdapter.setQueryExhausted();
                 }
             }
         });
@@ -123,7 +137,28 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
             public void onChanged(@Nullable Boolean aBoolean) {
                 Log.d(TAG, "onChanged: the query is exhausted..." + aBoolean);
                 if (aBoolean) {
-                    mAdapter.setQueryExhausted();
+                    mRepositoryAdapter.setQueryExhausted();
+                }
+            }
+        });
+
+        mDeveloperListViewModel.getDevelopersList().observe(this, new Observer<List<DeveloperResponse>>() {
+            @Override
+            public void onChanged(@Nullable List<DeveloperResponse> developer) {
+                if (developer != null) {
+                    mDeveloperListViewModel.setIsPerformingQuery(false);
+                    mDeveloeprAdapter.setDeveloeprss(developer);
+                    mDeveloeprAdapter.setQueryExhausted();
+                }
+            }
+        });
+
+        mDeveloperListViewModel.isQueryExhausted().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                Log.d(TAG, "onChanged: the query is exhausted..." + aBoolean);
+                if (aBoolean) {
+                    mDeveloeprAdapter.setQueryExhausted();
                 }
             }
         });
@@ -131,10 +166,11 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
 
 
     private void initRecyclerView() {
-        mAdapter = new ReposotriesRecyclerAdapter(this);
+        mRepositoryAdapter = new ReposotriesRecyclerAdapter(this);
+        mDeveloeprAdapter = new DeveloperRecyclerAdapter(this);
         VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(30);
         mRecyclerView.addItemDecoration(itemDecorator);
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mRepositoryAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -142,7 +178,8 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                mAdapter.displayLoading();
+
+                mRepositoryAdapter.displayLoading();
                 mRepositoryListViewModel.searchRepositoriesApi(s);
                 mSearchView.clearFocus();
 
@@ -159,7 +196,14 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
     @Override
     public void onRepoClick(int position) {
         Intent intent = new Intent(this, RepoDetailActivity.class);
-        intent.putExtra("recipe", mAdapter.getSelectedRepo(position));
+        intent.putExtra("recipe", mRepositoryAdapter.getSelectedRepo(position));
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDeveloperClick(int position) {
+        Intent intent = new Intent(this, RepoDetailActivity.class);
+        intent.putExtra("recipe", mDeveloeprAdapter.getSelectedDeveloper(position));
         startActivity(intent);
     }
 

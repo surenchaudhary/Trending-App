@@ -1,5 +1,6 @@
 package com.test.myapplication.rest;
 
+import com.test.myapplication.rest.responses.DeveloperResponse;
 import com.test.myapplication.rest.responses.RepositoryResponse;
 
 import java.util.List;
@@ -16,5 +17,9 @@ public interface TrendingApi {
     // GET Repositories REQUEST
     @GET("repositories")
     Call<List<RepositoryResponse>> getRepositories();
+
+    // GET Develoepr REQUEST
+    @GET("developers")
+    Call<List<DeveloperResponse>> getDevelopers();
 
 }

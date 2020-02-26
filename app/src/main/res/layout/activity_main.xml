@@ -30,8 +30,12 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary" />
+            android:layout_height="?actionBarSize"
+            app:tabTextAppearance="@style/TabLayoutTextAppearance"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextColor="@android:color/black"
+            android:background="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
