@@ -1,14 +1,18 @@
 package com.test.myapplication.rest.responses;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Surendra Singh on 2/26/2020.
  * Created for Pitney Bowes
  */
-public class RepositoryResponse {
+public class RepositoryResponse implements Parcelable {
 
     /**
      * author : jwasham
@@ -173,4 +177,54 @@ public class RepositoryResponse {
             this.avatar = avatar;
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.author);
+        dest.writeString(this.name);
+        dest.writeString(this.avatar);
+        dest.writeString(this.url);
+        dest.writeString(this.description);
+        dest.writeInt(this.stars);
+        dest.writeInt(this.forks);
+        dest.writeInt(this.currentPeriodStars);
+        dest.writeString(this.language);
+        dest.writeString(this.languageColor);
+        dest.writeList(this.builtBy);
+    }
+
+    public RepositoryResponse() {
+    }
+
+    protected RepositoryResponse(Parcel in) {
+        this.author = in.readString();
+        this.name = in.readString();
+        this.avatar = in.readString();
+        this.url = in.readString();
+        this.description = in.readString();
+        this.stars = in.readInt();
+        this.forks = in.readInt();
+        this.currentPeriodStars = in.readInt();
+        this.language = in.readString();
+        this.languageColor = in.readString();
+        this.builtBy = new ArrayList<BuiltByBean>();
+        in.readList(this.builtBy, BuiltByBean.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<RepositoryResponse> CREATOR = new Parcelable.Creator<RepositoryResponse>() {
+        @Override
+        public RepositoryResponse createFromParcel(Parcel source) {
+            return new RepositoryResponse(source);
+        }
+
+        @Override
+        public RepositoryResponse[] newArray(int size) {
+            return new RepositoryResponse[size];
+        }
+    };
 }
