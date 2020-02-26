@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -139,7 +138,7 @@ public class RepositoryResponse implements Parcelable {
         this.builtBy = builtBy;
     }
 
-    public static class BuiltByBean {
+    public static class BuiltByBean implements Parcelable {
         /**
          * username : jwasham
          * href : https://github.com/jwasham
@@ -176,6 +175,39 @@ public class RepositoryResponse implements Parcelable {
         public void setAvatar(String avatar) {
             this.avatar = avatar;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.username);
+            dest.writeString(this.href);
+            dest.writeString(this.avatar);
+        }
+
+        public BuiltByBean() {
+        }
+
+        protected BuiltByBean(Parcel in) {
+            this.username = in.readString();
+            this.href = in.readString();
+            this.avatar = in.readString();
+        }
+
+        public static final Parcelable.Creator<BuiltByBean> CREATOR = new Parcelable.Creator<BuiltByBean>() {
+            @Override
+            public BuiltByBean createFromParcel(Parcel source) {
+                return new BuiltByBean(source);
+            }
+
+            @Override
+            public BuiltByBean[] newArray(int size) {
+                return new BuiltByBean[size];
+            }
+        };
     }
 
     @Override
@@ -195,7 +227,7 @@ public class RepositoryResponse implements Parcelable {
         dest.writeInt(this.currentPeriodStars);
         dest.writeString(this.language);
         dest.writeString(this.languageColor);
-        dest.writeList(this.builtBy);
+        dest.writeTypedList(this.builtBy);
     }
 
     public RepositoryResponse() {
@@ -212,8 +244,7 @@ public class RepositoryResponse implements Parcelable {
         this.currentPeriodStars = in.readInt();
         this.language = in.readString();
         this.languageColor = in.readString();
-        this.builtBy = new ArrayList<BuiltByBean>();
-        in.readList(this.builtBy, BuiltByBean.class.getClassLoader());
+        this.builtBy = in.createTypedArrayList(BuiltByBean.CREATOR);
     }
 
     public static final Parcelable.Creator<RepositoryResponse> CREATOR = new Parcelable.Creator<RepositoryResponse>() {

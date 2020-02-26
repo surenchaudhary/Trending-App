@@ -196,15 +196,15 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
     @Override
     public void onRepoClick(int position) {
         Intent intent = new Intent(this, RepoDetailActivity.class);
-        intent.putExtra("recipe", mRepositoryAdapter.getSelectedRepo(position));
+        intent.putExtra("repository", mRepositoryAdapter.getSelectedRepo(position));
         startActivity(intent);
     }
 
     @Override
     public void onDeveloperClick(int position) {
-        Intent intent = new Intent(this, RepoDetailActivity.class);
+      /*  Intent intent = new Intent(this, RepoDetailActivity.class);
         intent.putExtra("recipe", mDeveloeprAdapter.getSelectedDeveloper(position));
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
  /*   @Override
