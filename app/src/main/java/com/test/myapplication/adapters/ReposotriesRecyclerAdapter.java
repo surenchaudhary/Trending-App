@@ -162,6 +162,19 @@ public class ReposotriesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         return null;
     }
 
+    public void filter(String text) {
+        List<RepositoryResponse> temp = new ArrayList();
+        for (RepositoryResponse d : mRepositories) {
+            //or use .equal(text) with you want equal match
+            //use .toLowerCase() for better matches
+            if (d.getName().contains(text)) {
+                temp.add(d);
+            }
+        }
+        //update recyclerview
+        setRepositories(temp);
+    }
+
 }
 
 

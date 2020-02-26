@@ -2,6 +2,7 @@ package com.test.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -84,22 +85,7 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
             }
         });
 
-     /*   ConstraintLayout tabOne = (ConstraintLayout) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab_item, null);
-        ImageView usps = tabOne.findViewById(R.id.iv_carrier);
-        usps.setImageResource(R.drawable.usps);
-        tabLayout.getTabAt(0).setCustomView(tabOne);
 
-        ConstraintLayout tabTwo = (ConstraintLayout) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab_item, null);
-        ImageView fedex = tabTwo.findViewById(R.id.iv_carrier);
-        fedex.setImageResource(R.drawable.fedex);
-
-        tabLayout.getTabAt(1).setCustomView(tabTwo);
-
-        ConstraintLayout tabThree = (ConstraintLayout) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab_item, null);
-        ImageView ups = tabThree.findViewById(R.id.iv_carrier);
-        ups.setImageResource(R.drawable.ups);
-
-        tabLayout.getTabAt(2).setCustomView(tabThree);*/
     }
 
     private void loadRepositories() {
@@ -117,7 +103,6 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
         mDeveloperListViewModel.getDevelopers();
         mSearchView.clearFocus();
     }
-
 
 
     private void subscribeObservers() {
@@ -178,16 +163,27 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-
-                mRepositoryAdapter.displayLoading();
-                mRepositoryListViewModel.searchRepositoriesApi(s);
-                mSearchView.clearFocus();
+                if (isRepoSelected) {
+                    mSearchView.clearFocus();
+                    mRepositoryAdapter.filter(s.toString());
+                } else {
+                    mSearchView.clearFocus();
+                    mDeveloeprAdapter.filter(s.toString());
+                }
 
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if (TextUtils.isEmpty(s)) {
+                    if (isRepoSelected) {
+                        loadRepositories();
+                    } else {
+                        loadDeveloeprs();
+                    }
+                }
+
                 return false;
             }
         });

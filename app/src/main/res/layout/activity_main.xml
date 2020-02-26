@@ -13,14 +13,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/toolbar"
-            app:title="Trending"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:title="Trending">
 
             <androidx.appcompat.widget.SearchView
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:id="@+id/search_view"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:queryHint="search...">
 
             </androidx.appcompat.widget.SearchView>
@@ -32,7 +31,6 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             app:tabTextAppearance="@style/TabLayoutTextAppearance"
-            app:tabMode="fixed"
             app:tabSelectedTextColor="@color/colorPrimary"
             app:tabTextColor="@android:color/black"
             android:background="@android:color/white" />

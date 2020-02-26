@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.test.myapplication.R;
 import com.test.myapplication.rest.responses.DeveloperResponse;
+import com.test.myapplication.rest.responses.RepositoryResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,6 +163,18 @@ public class DeveloperRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         return null;
     }
 
+    public void filter(String text) {
+        List<DeveloperResponse> temp = new ArrayList();
+        for (DeveloperResponse d : mDevelopers) {
+            //or use .equal(text) with you want equal match
+            //use .toLowerCase() for better matches
+            if (d.getName().contains(text)) {
+                temp.add(d);
+            }
+        }
+        //update recyclerview
+        setDeveloeprss(temp);
+    }
 }
 
 

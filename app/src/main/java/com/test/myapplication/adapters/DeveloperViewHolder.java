@@ -34,7 +34,7 @@ public class DeveloperViewHolder extends RecyclerView.ViewHolder implements View
 
     @Override
     public void onClick(View v) {
-        onRepoListener.onRepoClick(getAdapterPosition());
+        onRepoListener.onDeveloperClick(getAdapterPosition());
     }
 }
 
