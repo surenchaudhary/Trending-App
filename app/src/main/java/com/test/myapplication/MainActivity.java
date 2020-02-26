@@ -163,14 +163,7 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                if (isRepoSelected) {
-                    mSearchView.clearFocus();
-                    mRepositoryAdapter.filter(s.toString());
-                } else {
-                    mSearchView.clearFocus();
-                    mDeveloeprAdapter.filter(s.toString());
-                }
-
+                mSearchView.clearFocus();
                 return false;
             }
 
@@ -181,6 +174,14 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
                         loadRepositories();
                     } else {
                         loadDeveloeprs();
+                    }
+                } else {
+                    if (isRepoSelected) {
+                        //mSearchView.clearFocus();
+                        mRepositoryAdapter.filter(s.toString());
+                    } else {
+                        //mSearchView.clearFocus();
+                        mDeveloeprAdapter.filter(s.toString());
                     }
                 }
 
@@ -198,9 +199,7 @@ public class MainActivity extends BaseActivity implements OnRepoListener {
 
     @Override
     public void onDeveloperClick(int position) {
-      /*  Intent intent = new Intent(this, RepoDetailActivity.class);
-        intent.putExtra("recipe", mDeveloeprAdapter.getSelectedDeveloper(position));
-        startActivity(intent);*/
+
     }
 
  /*   @Override

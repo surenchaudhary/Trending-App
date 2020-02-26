@@ -168,7 +168,7 @@ public class DeveloperRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         for (DeveloperResponse d : mDevelopers) {
             //or use .equal(text) with you want equal match
             //use .toLowerCase() for better matches
-            if (d.getName().contains(text)) {
+            if (d.getName().contains(text) || d.getName().startsWith(text)) {
                 temp.add(d);
             }
         }

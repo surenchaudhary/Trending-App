@@ -60,16 +60,16 @@ public class RepoDetailActivity extends BaseActivity {
     private void getIncomingIntent() {
         if (getIntent().hasExtra("repository")) {
             RepositoryResponse repository = getIntent().getParcelableExtra("repository");
-            setRecipeProperties(repository);
+            setRepoProperties(repository);
         }
     }
 
     private void subscribeObservers() {
         mRepositoryViewModel.getRepository().observe(this, new Observer<RepositoryResponse>() {
             @Override
-            public void onChanged(@Nullable RepositoryResponse recipe) {
-                if (recipe != null) {
-                    setRecipeProperties(recipe);
+            public void onChanged(@Nullable RepositoryResponse repository) {
+                if (repository != null) {
+                    setRepoProperties(repository);
                     mRepositoryViewModel.setRetrievedRepository(true);
                 }
             }
@@ -115,7 +115,7 @@ public class RepoDetailActivity extends BaseActivity {
         showProgressBar(false);
     }
 
-    private void setRecipeProperties(RepositoryResponse repository) {
+    private void setRepoProperties(RepositoryResponse repository) {
         if (repository != null) {
             RequestOptions requestOptions = new RequestOptions()
                     .placeholder(R.drawable.ic_launcher_background);

@@ -167,7 +167,7 @@ public class ReposotriesRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         for (RepositoryResponse d : mRepositories) {
             //or use .equal(text) with you want equal match
             //use .toLowerCase() for better matches
-            if (d.getName().contains(text)) {
+            if (d.getName().contains(text)|| d.getName().startsWith(text)) {
                 temp.add(d);
             }
         }
